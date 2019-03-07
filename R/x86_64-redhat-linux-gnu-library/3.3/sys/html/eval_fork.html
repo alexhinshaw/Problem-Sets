@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Safe Evaluation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for eval_safe {sys}"><tr><td>eval_safe {sys}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Safe Evaluation</h2>
+
+<h3>Description</h3>
+
+<p>Evaluates an expression in a temporary fork and returns the value without any
+side effects on the main R session. For <code><a href="eval_fork.html">eval_safe()</a></code> the expression is wrapped
+in additional R code to handle errors and graphics.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+eval_safe(expr, tmp = tempfile("fork"), std_out = stdout(),
+  std_err = stderr(), timeout = 0, priority = NULL, uid = NULL,
+  gid = NULL, rlimits = NULL, profile = NULL, device = pdf)
+
+eval_fork(expr, tmp = tempfile("fork"), std_out = stdout(),
+  std_err = stderr(), timeout = 0)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>expr</code></td>
+<td>
+<p>expression to evaluate</p>
+</td></tr>
+<tr valign="top"><td><code>tmp</code></td>
+<td>
+<p>the value of <code><a href="../../base/html/tempfile.html">tempdir()</a></code> inside the forked process</p>
+</td></tr>
+<tr valign="top"><td><code>std_out</code></td>
+<td>
+<p>if and where to direct child process <code>STDOUT</code>. Must be one of
+<code>TRUE</code>, <code>FALSE</code>, filename, connection object or callback function. See section
+on <em>Output Streams</em> below for details.</p>
+</td></tr>
+<tr valign="top"><td><code>std_err</code></td>
+<td>
+<p>if and where to direct child process <code>STDERR</code>. Must be one of
+<code>TRUE</code>, <code>FALSE</code>, filename, connection object or callback function. See section
+on <em>Output Streams</em> below for details.</p>
+</td></tr>
+<tr valign="top"><td><code>timeout</code></td>
+<td>
+<p>maximum time in seconds to allow for call to return</p>
+</td></tr>
+<tr valign="top"><td><code>priority</code></td>
+<td>
+<p>(integer) priority of the child process. High value is low priority.
+Non root user may only raise this value (decrease priority)</p>
+</td></tr>
+<tr valign="top"><td><code>uid</code></td>
+<td>
+<p>evaluate as given user (uid or name). See <code><a href="../../unix/html/setuid.html">unix::setuid()</a></code>, only for root.</p>
+</td></tr>
+<tr valign="top"><td><code>gid</code></td>
+<td>
+<p>evaluate as given group (gid or name). See <code><a href="../../unix/html/setgid.html">unix::setgid()</a></code> only for root.</p>
+</td></tr>
+<tr valign="top"><td><code>rlimits</code></td>
+<td>
+<p>named vector/list with rlimit values, for example: <code>c(cpu = 60, fsize = 1e6)</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>profile</code></td>
+<td>
+<p>AppArmor profile, see <code>RAppArmor::aa_change_profile()</code>.
+Requires the <code>RAppArmor</code> package (Debian/Ubuntu only)</p>
+</td></tr>
+<tr valign="top"><td><code>device</code></td>
+<td>
+<p>graphics device to use in the fork, see <code><a href="../../grDevices/html/dev.html">dev.new()</a></code></p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Some programs such as <code>Java</code> are not fork-safe and cannot be called from within a
+forked process if they have already been loaded in the main process. On MacOS any
+software calling <code>CoreFoundation</code> functionality might crash within the fork. This
+includes <code>libcurl</code> which has been built on OSX against native SecureTransport rather
+than OpenSSL for https connections. The same limitations hold for e.g. <code>parallel::mcparallel()</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+#Only works on Unix
+if(.Platform$OS.type == "unix"){
+
+# works like regular eval:
+eval_safe(rnorm(5))
+
+# Exceptions get propagated
+test &lt;- function() { doesnotexit() }
+tryCatch(eval_safe(test()), error = function(e){
+  cat("oh no!", e$message, "\n")
+})
+
+# Honor interrupt and timeout, even inside C evaluations
+try(eval_safe(svd(matrix(rnorm(1e8), 1e4)), timeout = 2))
+
+# Capture output
+outcon &lt;- rawConnection(raw(0), "r+")
+eval_safe(print(sessionInfo()), std_out = outcon)
+cat(rawToChar(rawConnectionValue(outcon)))
+close(outcon)
+}
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>sys</em> version 2.1 <a href="00Index.html">Index</a>]</div>
+</body></html>
