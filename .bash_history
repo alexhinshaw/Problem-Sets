@@ -314,3 +314,20 @@ git fetch origin master
 git merge origin master
 git push origin master
 git add .
+git remote -v
+git push upstream
+git merge upstream/development
+git merge upstream
+check upstream
+git merge upstream/master
+git fetch upstream
+git prune
+git fetch upstream
+git merge upstream/master
+git add .
+git add
+git add .
+git commit -m ""
+git push upstream/master
+git push origin master
+git pull
