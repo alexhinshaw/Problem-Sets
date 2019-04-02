@@ -331,3 +331,72 @@ git commit -m ""
 git push upstream/master
 git push origin master
 git pull
+git fetch upstrem
+git fetch upstream
+git merge
+git fetch upstream
+git add .
+git commit -m ""
+git commit -m "1"
+git push upstream
+git merge upstream
+git push origin upstream
+git push origin master
+git pull origin mastee
+git pull origin master
+git push origin master
+git merge
+git merge upstream master
+git merge upstream
+git push upstream
+cd ~/DScourseS19
+git pull origin master
+git add .
+git commit -m "update"
+git push origin master
+git pull origin master
+git fetch upstream
+git add .
+git commit -m "message"
+git push origin master
+check master
+cd ~/DScourseS19
+cd ~/ProblemSets
+cd ProblemSets
+mkdir PS6
+cd PS6
+git add .
+git commit -m "PS6"
+git push origin master
+git fetch upstream
+git branch -a
+git merge upsteam master
+git merge upstream/master
+git push origin master
+~/ProblemSets
+cd ~/ProblemSets
+cd ProblemSets
+cd ~/DScourseS19
+cd ProblemSets
+mkdir PS7
+cd PS7
+git add .
+git commit -m "PS7"
+git push origin master
+git merge upstream/master
+git pull origin master
+git merge origin master
+git merge upstream
+git pull upstream
+git merge upstream/master
+git merge upstream/master -m "PS7"
+git push origin/master
+git push origin master
+git merge origin/master
+cd ~/DScourseS19
+cd ~/ProblemSets
+cd ~/DScourseS19/ProblemSets
+mkdir "PS9"
+setcd "PS9"
+cd ~/PS9
+cd ~/DScourseS19/ProblemSets/PS9
